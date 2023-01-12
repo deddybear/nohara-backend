@@ -2,12 +2,11 @@ const { knex } = require("../config/knex");
 const { Model } = require("objection");
 
 Model.knex(knex);
-// https://www.youtube.com/watch?v=lPlgRp6-CqU
-class Caraousel extends Model {
 
+class Services extends Model {
   // Table name is the only required property.
   static get tableName() {
-    return "caraousel";
+    return "services";
   }
 
   // Each model must have a column (or a set of columns) that uniquely
@@ -17,7 +16,7 @@ class Caraousel extends Model {
   static get idColumn() {
     return "id";
   }
-  
+
   // Optional JSON schema. This is not the database schema!
   // No tables or columns are generated based on this. This is only
   // used for input validation. Whenever a model instance is created
@@ -25,32 +24,17 @@ class Caraousel extends Model {
   // See http://json-schema.org/ for more info.
   static get jsonSchema() {
     return {
-        type: 'object',
-        required: ['name'],
-        properties: {
-            id : {type : 'string', format: 'uuid'},
-            photos_id : {type: 'string', format: 'uuid'},
-            name: {type: 'string', minLength: 5, maxLength: 50},
-            created_at: {type: 'string', format: 'date_time'},
-            deleted_at: {type: 'string', format: 'date_time'}
-        }
+      type: "object",
+      required: ["name"],
+      properties: {
+        id: { type: "string", format: "uuid" },
+        photos_id: { type: "string", format: "uuid" },
+        name: { type: "string", minLength: 5, maxLength: 50 },
+        created_at: { type: "string", format: "date_time" },
+        deleted_at: { type: "string", format: "date_time" },
+      },
     };
-  }
-
-  static get relationMappings() {
-    const CollectionPhotos = require('./CollectionPhotos');
-
-    return {
-        CollectionPhotos: {
-            relation: Model.HasOneRelation,
-            modelClass: CollectionPhotos,
-            join: {
-                from: 'caraousel.photos_id',
-                to: 'collection_photos.id'
-            }
-        }
-    }
   }
 }
 
-module.exports = Caraousel;
+module.exports = Services;

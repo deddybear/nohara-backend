@@ -1,12 +1,11 @@
-import knexfile from "../knexfile"
-
+import knexfile from "../knexfile.js"
+import knex from "knex";
 /**
  * connection with database mysql
  * infomation u can see at directory root filename knexflie.js
  */
 
-const knex = require("knex") (
-    knexfile.development
-)
 
-module.exports = knex;
+export default knex(
+    knexfile.development
+);

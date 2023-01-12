@@ -1,9 +1,20 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
+import Express from "express";
+import { loginUser, createUser } from "../controllers/UsersController.js";
+const router = Express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+/**
+ * POST METHOD FOR LOGIN USER
+ * function in file Usercontroller
+ * function name : createUser
+ */
+router.post("/create", createUser);
 
-module.exports = router;
+/**
+ * POST METHOD FOR LOGIN USER
+ * function in file Usercontroller
+ * function name : loginUser
+ */
+router.post("/login", loginUser);
+
+export default router;
