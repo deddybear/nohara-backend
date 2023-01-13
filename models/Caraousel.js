@@ -1,5 +1,7 @@
-const { knex } = require("../config/knex");
-const { Model } = require("objection");
+"use strict";
+import { Model } from "objection";
+import knex from "../config/knex.js";
+import CollectionPhotos from "./CollectionPhotos.js";
 
 Model.knex(knex);
 // https://www.youtube.com/watch?v=lPlgRp6-CqU
@@ -38,7 +40,7 @@ class Caraousel extends Model {
   }
 
   static get relationMappings() {
-    const CollectionPhotos = require('./CollectionPhotos');
+
 
     return {
         CollectionPhotos: {
@@ -53,4 +55,4 @@ class Caraousel extends Model {
   }
 }
 
-module.exports = Caraousel;
+export default Caraousel;
