@@ -7,6 +7,7 @@ import logger from "morgan";
 import cors from "cors";
 import UsersRouter from "./routes/users.js";
 import CaraRouter from "./routes/caraouselRoutes.js";
+const __dirname = path.resolve();
 
 const app = Express();
 app.use(cors());
@@ -14,25 +15,26 @@ app.use(logger("dev"));
 app.use(Express.json());
 app.use(Express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(Express.static(path.join("public")));
+
 
 app.use("/api/users", UsersRouter);
 app.use("/api/caraousel", CaraRouter);
+app.use("/static", Express.static(path.join(__dirname, "public/images/")));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+    return res.status(200).send('Hello !')
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
+// app.use(function (err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get("env") === "development" ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render("error");
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render("error");
+// });
 
 export default app;

@@ -30,11 +30,11 @@ class Caraousel extends Model {
         type: 'object',
         required: ['name'],
         properties: {
-            id : {type : 'string', format: 'uuid'},
-            photos_id : {type: 'string', format: 'uuid'},
+            id : {type : 'string'},
+            photos_id : {type: 'string'},
             name: {type: 'string', minLength: 5, maxLength: 50},
-            created_at: {type: 'string', format: 'date_time'},
-            deleted_at: {type: 'string', format: 'date_time'}
+            created_at: {type: 'string'},
+            deleted_at: {type: 'string'}
         }
     };
   }

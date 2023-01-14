@@ -15,12 +15,11 @@ class CollectionPhotos extends Model {
   static get jsonSchema() {
     return {
       type: "object",
-      required: ["name"],
       properties: {
-        id: { type: "string", format: "uuid" },
+        id: { type: "string"},
         path: { type: "string" },
-        created_at: { type: "string", format: "date_time" },
-        deleted_at: { type: "string", format: "date_time" },
+        created_at: { type: "string" },
+        deleted_at: { type: "string" },
       },
     };
   }

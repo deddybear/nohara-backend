@@ -23,7 +23,7 @@ class Users extends Model {
         password: { type: "string" },
         email: { type: "string", format: "email" },
         name: { type: "string" },
-        updated_at: { type: "string", format: "date_time" },
+        updated_at: { type: "string", format: "time" },
       },
     };
   }

@@ -7,9 +7,9 @@ import { Api as msgApi, success } from "../lib/Messages.js";
 
 export const createUser = async (req, res) => {
   try {
-    res.status(200).json(req.body);
+    res.status(200).send(req.body);
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).send(error);
   }
 };  
 
@@ -32,7 +32,7 @@ export const loginUser = async (req, res) => {
     if (!passwordIsValid) {
       return res
         .status(401)
-        .json(msgApi(401, "Username or Password are invalid !"));
+        .send(msgApi(401, "Username or Password are invalid !"));
     }
 
     //* create token
@@ -43,14 +43,14 @@ export const loginUser = async (req, res) => {
     //* return respone while is success
     return res
       .status(200)
-      .json(
+      .send(
         success(200, "Login successfull", {
           user: { id: user.id, username: user.username, email: user.email },
-          token: token,
+          token: `Viscape ${token}`,
         })
       );
   } catch (error) {
     // console.log(error);
-    return res.status(500).json(msgApi(500, "Internal Server Error"));
+    return res.status(500).send(msgApi(500, "Internal Server Error"));
   }
 };

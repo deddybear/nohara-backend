@@ -1,26 +1,22 @@
 "use strict";
 
+import multer from "multer";
 import Express from "express";
 import { getList, create } from "../controllers/CaraouselController.js";
-const router = Express.Router();
-import multer from "multer";
+import { verifyToken } from "../middleware/verifyJwtToken.js";
+import { diskStorage, configMulter } from "../middleware/multerStorage.js";
 
-// menentukan lokasi pengunggahan
-const diskStorage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, "public/images"));
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
+
+const upload = multer({
+  storage: diskStorage("caraousel"),
+  limits: { fieldSize: configMulter.filesize },
+  fileFilter: configMulter.fileFilter,
+}).array("photo", 3);
+const router = Express.Router();
 
 /* GET users listing. */
 router.get("/list", getList);
 
 //* create data caraousel
-router.post("/create", multer({storage: diskStorage}).array('photo', 3), create);
+router.post("/create", [verifyToken, upload], create);
 export default router;
