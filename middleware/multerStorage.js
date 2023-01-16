@@ -2,6 +2,8 @@ import multer from "multer";
 import path from "path";
 const __dirname = path.resolve();
 
+//https://github.com/gitoutofbox/nodejs-file-upload
+
 export const diskStorage = (folder) =>
   multer.diskStorage({
     destination: function (req, file, callback) {

@@ -2,7 +2,7 @@
 
 import multer from "multer";
 import Express from "express";
-import { getList, create } from "../controllers/CaraouselController.js";
+import { getList, create, destroy } from "../controllers/CaraouselController.js";
 import { verifyToken } from "../middleware/verifyJwtToken.js";
 import { diskStorage, configMulter } from "../middleware/multerStorage.js";
 
@@ -19,4 +19,6 @@ router.get("/list", getList);
 
 //* create data caraousel
 router.post("/create", [verifyToken, upload], create);
+
+router.delete("/delete/:id", [verifyToken], destroy);
 export default router;
