@@ -13,28 +13,54 @@ const __dirname = path.resolve();
 //https://www.ultimateakash.com/blog-details/IixDLGAKYAo=/How-to-implement-Transactions-in-Objection.Js-&-Node.Js-(Express)
 //https://stackoverflow.com/questions/5315138/node-js-remove-file
 
+/**
+ * * function for countData
+ */
+export const countData = async (req, res) => {
+  try {
+    //* query count column id as total_data
+    const totalData = await Caraousel.query().count(
+      "caraousel.id as total_data"
+    );
+    //* return response 200 and total data
+    res.status(200).send(success(200, "success", totalData[0]));
+  } catch (error) {
+    //* console.log error
+    console.log(error);
+
+    //* return response 500 and message
+    return res.status(500).send(msgApi(500, "Internal Server Error"));
+  }
+};
+
 //* function for get list with queryparam offset and limit
 //* for pagination
 export const getList = async (req, res) => {
   //* get params offset at url
   const offset = req.query.offset ?? "0";
   //* get params limit at url
-  const limit = req.query.limit ?? "10";
+  const limit = req.query.limit ?? "8";
 
   //* if offset or limit is null
   //* set default offset = 0
-  //* set default limit = 10
+  //* set default limit = 8
 
   try {
     //* query to get data where offset and limit has been set before
     const data = await Caraousel.query()
-      .select("caraousel.*", "p.path")
+      .select("caraousel.id", "caraousel.created_at", "caraousel.name", "p.path")
       .joinRelated("CollectionPhotos", { alias: "p" })
+    //   .orderBy('created_at', 'desc')
       .offset(offset)
       .limit(limit);
 
+    //* query count column id as total_data
+    const count = await Caraousel.query().count(
+      "caraousel.id as total_data"
+    );
+
     //* return response with result query
-    res.status(200).send(data);
+    res.status(200).send(success(200, 'success', {total:count[0].total_data, data}));
   } catch (error) {
     console.log(error);
     return res.status(500).send(msgApi(500, "Internal Server Error"));
@@ -106,7 +132,6 @@ export const destroy = async (req, res) => {
   const transaction = await knex.transaction();
 
   try {
-
     //* because caraosel have foreign key CollectionPhotos
     const data = await CollectionPhotos.query(transaction)
       .select("id", "path")
@@ -124,29 +149,36 @@ export const destroy = async (req, res) => {
 
     //* if query delete at collection photos is not success
     if (!result) {
-        return res.status(500).send(msgApi(500, "Failed Deleted Data in Database"));
+      return res
+        .status(500)
+        .send(msgApi(500, "Failed Deleted Data in Database"));
     }
 
     //* get file path at index 3 coz split by function
     const pathFile = data.path.split("/");
 
     //* delete file selected path
-    fs.unlinkSync(path.join(__dirname, `public/images/${pathFile[2]}/${pathFile[3]}`), (err) => {
-      if (err) return res.status(404).send(msgApi(404, "Data Not Found"));
-    });
+    fs.unlinkSync(
+      path.join(__dirname, `public/images/${pathFile[2]}/${pathFile[3]}`),
+      (err) => {
+        if (err) return res.status(404).send(msgApi(404, "Data Not Found"));
+      }
+    );
 
     //* commit db transaction
     transaction.commit();
- 
+
     //* retun response 200 success
-    return res.status(200).send(msgApi(200, "Delete Data File and Database is success !"));
+    return res
+      .status(200)
+      .send(msgApi(200, "Delete Data File and Database is success !"));
   } catch (error) {
     console.log(error);
 
     //* db transaction rollback
     await transaction.rollback();
 
-    //* return response error 500 
+    //* return response error 500
     return res.status(500).send(msgApi(500, "Internal Server Error"));
   }
 };
