@@ -11,7 +11,7 @@ export const verifyToken = async (req, res, next) => {
 
     //* check header access token while header access null -> get response error
     if (!tokenHeader) {
-      return res.status(400).send(msgApi(400, "Authorization Token Not Found"));
+      return res.status(401).send(msgApi(401, "Authorization Token Not Found"));
     }
 
     //* split value of token header
@@ -19,15 +19,15 @@ export const verifyToken = async (req, res, next) => {
 
     //* check if token not in format get response error
     if (token[0] !== "Viscape" || !token[1]) {
-      return res.status(400).send(msgApi(400, "Invalid Authorization Token"));
+      return res.status(401).send(msgApi(401, "Invalid Authorization Token"));
     }
 
     //* verify header acces token 
     Jwt.verify(token[1], API_SECRET, (err, decoded) => {
       if (err) {
         return res
-          .status(400)
-          .send(msgApi(400, "Failed decode Authorization Token"));
+          .status(401)
+          .send(msgApi(401, "Failed decode Authorization Token"));
       }
 
       req.id = decoded.id;

@@ -48,9 +48,9 @@ export const getList = async (req, res) => {
   try {
     //* query to get data where offset and limit has been set before
     const data = await Caraousel.query()
-      .select("caraousel.id", "caraousel.created_at", "caraousel.name", "p.path")
+      .select("p.id", "caraousel.created_at", "caraousel.name", "p.path")
       .joinRelated("CollectionPhotos", { alias: "p" })
-    //   .orderBy('created_at', 'desc')
+      .orderBy('created_at', 'desc')
       .offset(offset)
       .limit(limit);
 
