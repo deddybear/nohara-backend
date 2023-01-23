@@ -32,7 +32,7 @@ class Caraousel extends Model {
         properties: {
             id : {type : 'string'},
             photos_id : {type: 'string'},
-            name: {type: 'string', minLength: 5, maxLength: 50},
+            name: {type: 'string', minLength: 4, maxLength: 50},
             created_at: {type: 'string'},
             deleted_at: {type: 'string'}
         }
@@ -40,7 +40,6 @@ class Caraousel extends Model {
   }
 
   static get relationMappings() {
-
 
     return {
         CollectionPhotos: {

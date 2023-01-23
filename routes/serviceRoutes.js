@@ -1,23 +1,22 @@
+//* Layanan Kami
+
 "use strict";
 
 import multer from "multer";
 import Express from "express";
-import { getList, create, destroy } from "../controllers/CaraouselController.js";
 import { verifyToken } from "../middleware/verifyJwtToken.js";
+import { getList, create, destroy } from "../controllers/ServiceController.js";
 import { diskStorage, configMulter } from "../middleware/multerStorage.js";
 const router = Express.Router();
 
 const upload = multer({
-  storage: diskStorage("caraousel"),
+  storage: diskStorage("pelayanan"),
   limits: { fieldSize: configMulter.filesize },
   fileFilter: configMulter.fileFilter,
 }).array("photo", 3);
 
-
-/* GET users listing. */
+//* fecth data services with queryparams limit and offset 
 router.get("/list", getList);
-
-// router.get("/total", countData);
 
 //* create data caraousel and middleware verifyToken upload
 router.post("/create", [verifyToken, upload], create);

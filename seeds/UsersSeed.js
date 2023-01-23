@@ -1,5 +1,5 @@
 "use strict";
-
+// knex seed:run --specific=UsersSeed.js
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
@@ -19,7 +19,7 @@ export const seed = async function (knex) {
       return knex("users").insert([
         {
           id: v4(),
-          username: "sudo",
+          username: "sudo1",
           password: bcrypt.hashSync("qwerty555", salt),
           email: "test@test.com",
           created_at: moment().local("id").format("YYYY-MM-DD HH:mm:ss"),

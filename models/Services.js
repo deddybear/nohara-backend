@@ -1,5 +1,7 @@
-const { knex } = require("../config/knex");
-const { Model } = require("objection");
+"use strict";
+import { Model } from "objection";
+import knex from "../config/knex.js";
+import CollectionPhotos from "./CollectionPhotos.js";
 
 Model.knex(knex);
 
@@ -27,14 +29,29 @@ class Services extends Model {
       type: "object",
       required: ["name"],
       properties: {
-        id: { type: "string", format: "uuid" },
-        photos_id: { type: "string", format: "uuid" },
-        name: { type: "string", minLength: 5, maxLength: 50 },
-        created_at: { type: "string", format: "date_time" },
-        deleted_at: { type: "string", format: "date_time" },
+        id: { type: "string" },
+        photos_id: { type: "string" },
+        name: { type: "string", minLength: 4, maxLength: 50 },
+        created_at: { type: "string" },
+        deleted_at: { type: "string" },
       },
     };
   }
+
+  static get relationMappings() {
+
+
+    return {
+        CollectionPhotos: {
+            relation: Model.HasOneRelation,
+            modelClass: CollectionPhotos,
+            join: {
+                from: 'services.photos_id',
+                to: 'collection_photos.id'
+            }
+        }
+    }
+  }
 }
 
-module.exports = Services;
+export default Services;

@@ -7,6 +7,9 @@ import logger from "morgan";
 import cors from "cors";
 import UsersRouter from "./routes/users.js";
 import CaraRouter from "./routes/caraouselRoutes.js";
+import ServRouter from "./routes/serviceRoutes.js";
+import ProtoRouter from "./routes/protofolioRoutes.js";
+import ContactRouter from "./routes/contactRoutest.js";
 const __dirname = path.resolve();
 
 const app = Express();
@@ -16,14 +19,18 @@ app.use(Express.json());
 app.use(Express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
-app.use("/api/users", UsersRouter);
-app.use("/api/caraousel", CaraRouter);
+app.use("/api/users", UsersRouter); //* users api
+app.use("/api/caraousel", CaraRouter); //* caraousel api
+app.use("/api/pelayanan", ServRouter); //* pelayanan api
+app.use("/api/protofolio", ProtoRouter); //* protofolio api
+app.use("/api/contact", ContactRouter); //* contact api
 app.use("/static", Express.static(path.join(__dirname, "public/images/")));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    return res.status(200).send('Hello !')
+  // console.log(req);
+  console.log(res);
+  return res.status(404).send("404");
 });
 
 // error handler

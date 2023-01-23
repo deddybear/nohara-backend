@@ -4,17 +4,13 @@ import fs from "fs";
 import moment from "moment/moment.js";
 import knex from "../config/knex.js";
 import { v4 } from "uuid";
-import Caraousel from "../models/Caraousel.js";
+import Protofolio from "../models/Protofolio.js";
 import { Api as msgApi, success } from "../lib/Messages.js";
 import CollectionPhotos from "../models/CollectionPhotos.js";
 import path from "path";
 const __dirname = path.resolve();
 
-//https://www.ultimateakash.com/blog-details/IixDLGAKYAo=/How-to-implement-Transactions-in-Objection.Js-&-Node.Js-(Express)
-//https://stackoverflow.com/questions/5315138/node-js-remove-file
-
-
-//* function for get list with queryparam offset and limit
+//* function for get list with queryparmas offset and limit
 //* for pagination
 export const getList = async (req, res) => {
   //* get params offset at url
@@ -28,15 +24,15 @@ export const getList = async (req, res) => {
 
   try {
     //* query to get data where offset and limit has been set before
-    const data = await Caraousel.query()
-      .select("p.id", "caraousel.created_at", "caraousel.name", "p.path")
+    const data = await Protofolio.query()
+      .select("p.id", "protofolio.created_at", "protofolio.name", "p.path")
       .joinRelated("CollectionPhotos", { alias: "p" })
       .orderBy("created_at", "desc")
       .offset(offset)
       .limit(limit);
 
     //* query count column id as total_data
-    const count = await Caraousel.query().count("caraousel.id as total_data");
+    const count = await Protofolio.query().count("protofolio.id as total_data");
 
     //* return response with result query
     res
@@ -48,15 +44,14 @@ export const getList = async (req, res) => {
   }
 };
 
-
-//* function for create new post caraousel 
+//* function for create new post protofolio
 export const create = async (req, res) => {
   //* create date time gmt+7 and now
   const time = moment().local("id").format("YYYY-MM-DD HH:mm:ss");
 
   //* get request files / photos
   const files = req.files;
-//   console.log(files);
+  //   console.log(files);
   //* if not have files / photos
   if (files.length <= 0) {
     return res.status(400).send(msgApi(400, "File Not Found"));
@@ -66,17 +61,17 @@ export const create = async (req, res) => {
   const transaction = await knex.transaction();
 
   try {
-    //* looping file and insert to db tabel collection_photos and caraousel
+    //* looping file and insert to db tabel collection_photos and protofolio
     for (const key in files) {
       //* insert data to tabel collection photos
       const photos = await CollectionPhotos.query(transaction).insert({
         id: v4(),
-        path: `/static/caraousel/${files[key].filename}`,
+        path: `/static/protofolio/${files[key].filename}`,
         created_at: time,
       });
 
-      //* insert data to tabel caraousel
-      await Caraousel.query(transaction).insert({
+      //* insert data to tabel protofolio
+      await Protofolio.query(transaction).insert({
         id: v4(),
         photos_id: photos.id,
         name: req.body.name,
@@ -90,7 +85,7 @@ export const create = async (req, res) => {
     //* retun response 200
     return res
       .status(200)
-      .send(success(200, "Create new Post Caraousel success !", v4()));
+      .send(success(200, "Create new Post Protofolio success !", v4()));
   } catch (error) {
     //* log error
     console.log(error);
