@@ -13,6 +13,6 @@ const router = Express.Router();
 //* fetch contact information
 router.get("/", getInformation);
 //* update contact information
-router.patch("/update", [verifyToken], updateInformation);
+router.patch("/update/:select", [verifyToken], updateInformation);
 
 export default router;

@@ -9,8 +9,7 @@ export const getInformation = async (req, res) => {
   try {
     const data = await Contact.query()
       .select(
-        "id",
-        "desc_company",
+        "description",
         "address",
         "whatsapp",
         "telephone",
@@ -32,30 +31,17 @@ export const getInformation = async (req, res) => {
 export const updateInformation = async (req, res) => {
   //* create date time gmt+7 and now
   const time = moment().local("id").format("YYYY-MM-DD HH:mm:ss");
-  const {
-    desc_company,
-    address,
-    whatsapp,
-    telephone,
-    email,
-    facebook,
-    instagarm,
-    tiktok,
-  } = req.body;
+  const columnSelected = req.params.select;
+  //* get data form request client
+  const requestBody = req.body;
+
   try {
     const resultUpdate = await Contact.query().findById(1).patch({
-      desc_company: desc_company,
-      address: address,
-      whatsapp: whatsapp,
-      telephone: telephone,
-      email: email,
-      facebook: facebook,
-      instagarm: instagarm,
-      tiktok: tiktok,
+      [columnSelected]: requestBody[columnSelected],
       updated_at: time
     });
 
-    res.status(200).send(success(200, "success", resultUpdate));
+    res.status(200).send(success(200, "success", time));
   } catch (error) {
     console.log(error);
 
