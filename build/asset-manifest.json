@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ee7c2bb0.css",
+    "main.js": "/static/js/main.24dec648.js",
+    "static/js/787.371d0d02.chunk.js": "/static/js/787.371d0d02.chunk.js",
+    "static/media/TEST11-jpg": "/static/media/TEST11-46d2cb3c95f86fee9a86.29fcaaa37eb27d0e0414.jpg",
+    "static/media/Untitled-1.jpg": "/static/media/Untitled-1.49c16361493abc90a15c.jpg",
+    "static/media/TEST11-scaled.jpg": "/static/media/TEST11-scaled.fca446ef50e7192cb2c7.jpg",
+    "static/media/logo_viscape.png": "/static/media/logo_viscape.6ba704d880caef7379fd.png",
+    "static/media/slick.svg": "/static/media/slick.2630a3e3eab21c607e21.svg",
+    "static/media/slick.eot": "/static/media/slick.a4e97f5a2a64f0ab1323.eot",
+    "static/media/slick.ttf": "/static/media/slick.c94f7671dcc99dce43e2.ttf",
+    "static/media/slick.woff": "/static/media/slick.295183786cd8a1389865.woff",
+    "index.html": "/index.html",
+    "main.ee7c2bb0.css.map": "/static/css/main.ee7c2bb0.css.map",
+    "main.24dec648.js.map": "/static/js/main.24dec648.js.map",
+    "787.371d0d02.chunk.js.map": "/static/js/787.371d0d02.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ee7c2bb0.css",
+    "static/js/main.24dec648.js"
+  ]
+}
