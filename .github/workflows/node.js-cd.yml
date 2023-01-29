@@ -25,4 +25,3 @@ jobs:
           git pull origin dev
           yarn install
           pm2 restart bin/www.js
-          
