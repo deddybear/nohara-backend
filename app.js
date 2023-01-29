@@ -25,7 +25,6 @@ app.use("/api/pelayanan", ServRouter); //* pelayanan api
 app.use("/api/protofolio", ProtoRouter); //* protofolio api
 app.use("/api/contact", ContactRouter); //* contact api
 app.use("/static", Express.static(path.join(__dirname, "public/images/")));
-app.use(Express.static(path.join(__dirname, 'build')));
 
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
