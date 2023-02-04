@@ -42,8 +42,8 @@ class Services extends Model {
 
 
     return {
-        CollectionPhotos: {
-            relation: Model.HasOneRelation,
+        photos: {
+            relation: Model.HasManyRelation,
             modelClass: CollectionPhotos,
             join: {
                 from: 'services.photos_id',

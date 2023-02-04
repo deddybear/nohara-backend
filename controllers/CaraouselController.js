@@ -97,7 +97,7 @@ export const create = async (req, res) => {
 
     //* remove file have been upload in server
     files.forEach(function (item) {
-      fs.unlink(item.path);
+      fs.unlinkSync(item.path);
     });
 
     //* db transaction rollback

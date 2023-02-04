@@ -25,11 +25,14 @@ export const getList = async (req, res) => {
   try {
     //* query to get data where offset and limit has been set before
     const data = await Services.query()
-      .select("p.id", "services.created_at", "services.name", "p.path")
-      .joinRelated("CollectionPhotos", { alias: "p" })
+      .select("services.created_at", "services.name", "photos_id as id")
       .orderBy("created_at", "desc")
       .offset(offset)
-      .limit(limit);
+      .limit(limit)
+      .withGraphFetched("photos")
+      .modifyGraph("photos", (builder) => {
+        builder.select("path");
+      });
 
     //* query count column id as total_data
     const count = await Services.query().count("services.id as total_data");
@@ -39,7 +42,7 @@ export const getList = async (req, res) => {
       .status(200)
       .send(success(200, "success", { total: count[0].total_data, data }));
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return res.status(500).send(msgApi(500, "Internal Server Error"));
   }
 };
@@ -51,7 +54,6 @@ export const create = async (req, res) => {
 
   //* get request files / photos
   const files = req.files;
-  //   console.log(files);
   //* if not have files / photos
   if (files.length <= 0) {
     return res.status(400).send(msgApi(400, "File Not Found"));
@@ -60,24 +62,24 @@ export const create = async (req, res) => {
   //* db transaction begin
   const transaction = await knex.transaction();
 
+  const idPhotos = v4();
   try {
     //* looping file and insert to db tabel collection_photos and Services
     for (const key in files) {
       //* insert data to tabel collection photos
-      const photos = await CollectionPhotos.query(transaction).insert({
-        id: v4(),
+      await CollectionPhotos.query(transaction).insert({
+        id: idPhotos,
         path: `/static/pelayanan/${files[key].filename}`,
         created_at: time,
       });
-
-      //* insert data to tabel Services
-      await Services.query(transaction).insert({
-        id: v4(),
-        photos_id: photos.id,
-        name: req.body.name,
-        created_at: time,
-      });
     }
+    //* insert data to tabel Services
+    await Services.query(transaction).insert({
+      id: v4(),
+      photos_id: idPhotos,
+      name: req.body.name,
+      created_at: time,
+    });
 
     //* commit db transaction
     transaction.commit();
@@ -92,7 +94,7 @@ export const create = async (req, res) => {
 
     //* remove file have been upload in server
     files.forEach(function (item) {
-      fs.unlink(item.path);
+      fs.unlinkSync(item.path);
     });
 
     //* db transaction rollback
@@ -113,7 +115,7 @@ export const destroy = async (req, res) => {
     //* because caraosel have foreign key CollectionPhotos
     const data = await CollectionPhotos.query(transaction)
       .select("id", "path")
-      .findById(id);
+      .where("id", id);
 
     //* check if data is null or path is null
     if (!data) {
@@ -121,9 +123,7 @@ export const destroy = async (req, res) => {
     }
 
     //* query delete at collection photos
-    const result = await CollectionPhotos.query(transaction).deleteById(
-      data.id
-    );
+    const result = await CollectionPhotos.query(transaction).deleteById(id);
 
     //* if query delete at collection photos is not success
     if (!result) {
@@ -133,15 +133,17 @@ export const destroy = async (req, res) => {
     }
 
     //* get file path at index 3 coz split by function
-    const pathFile = data.path.split("/");
+    data.map((item, inx) => {
+      const pathFile = item.path.split("/");
 
-    //* delete file selected path
-    fs.unlinkSync(
-      path.join(__dirname, `public/images/${pathFile[2]}/${pathFile[3]}`),
-      (err) => {
-        if (err) return res.status(404).send(msgApi(404, "Data Not Found"));
-      }
-    );
+      //* delete file selected path
+      fs.unlinkSync(
+        path.join(__dirname, `public/images/${pathFile[2]}/${pathFile[3]}`),
+        (err) => {
+          if (err) return res.status(404).send(msgApi(404, "Data Not Found"));
+        }
+      );
+    });
 
     //* commit db transaction
     transaction.commit();
