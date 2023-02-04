@@ -1,6 +1,8 @@
 import multer from "multer";
 import path from "path";
+import moment from "moment/moment.js";
 const __dirname = path.resolve();
+import { v4 } from "uuid";
 
 //https://github.com/gitoutofbox/nodejs-file-upload
 
@@ -12,7 +14,7 @@ export const diskStorage = (folder) =>
     filename: function (req, file, callback) {
       callback(
         null,
-        file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        file.fieldname + "-" +  v4() + path.extname(file.originalname)
       );
     },
   });
@@ -20,13 +22,15 @@ export const diskStorage = (folder) =>
 export const configMulter = {
   filesize: 1 * 1024 * 1024,
   fileFilter: (req, file, cb) => {
-    if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-        cb(null, true);
+    if (
+      file.mimetype == "image/png" ||
+      file.mimetype == "image/jpg" ||
+      file.mimetype == "image/jpeg"
+    ) {
+      cb(null, true);
     } else {
-        cb(null, false);
-        req.multer.error = 'Only .png, .jpg and .jpeg format allowed!';
+      cb(null, false);
+      req.multer.error = "Only .png, .jpg and .jpeg format allowed!";
     }
-  }
+  },
 };
-
-

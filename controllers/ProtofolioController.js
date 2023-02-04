@@ -87,12 +87,10 @@ export const create = async (req, res) => {
       .status(200)
       .send(success(200, "Create new Post Protofolio success !", v4()));
   } catch (error) {
-    //* log error
-    console.log(error);
 
     //* remove file have been upload in server
-    files.forEach(function (item) {
-      fs.unlink(item.path);
+    files.map((item, inx) => {
+      fs.unlinkSync(item.path);
     });
 
     //* db transaction rollback
