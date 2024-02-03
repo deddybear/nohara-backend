@@ -1,7 +1,6 @@
 "use strict";
 
 import Users from "../models/Users.js";
-import bcrypt from "bcrypt";
 import Jwt from "jsonwebtoken";
 import { Api as msgApi, success } from "../lib/Messages.js";
 
